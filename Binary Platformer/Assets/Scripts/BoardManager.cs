@@ -272,7 +272,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (boardPositionsFloor[i, j] == false)
                     {
-                        GameObject instance = Instantiate(corridorTile, new Vector3(i, 0f, j), Quaternion.identity) as GameObject;
+                        GameObject instance = Instantiate(corridorTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(transform);
                         boardPositionsFloor[i, j] = true;
                     }
@@ -296,7 +296,7 @@ public class BoardManager : MonoBehaviour
                 {
                     if (boardPositionsFloor[i, j] == false)
                     {
-                        GameObject instance = Instantiate(wallTile, new Vector3(i, 0.5f, j), Quaternion.identity) as GameObject;
+                        GameObject instance = Instantiate(wallTile, new Vector3(i, j, 0.5f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(transform);
                         boardPositionsFloor[i, j] = true;
                     }
@@ -315,6 +315,7 @@ public class BoardManager : MonoBehaviour
         {
             float sizeX = subDungeon.room.xMax - subDungeon.room.x;
             float sizeY = subDungeon.room.yMax - subDungeon.room.y;
+           // float sizeZ = subDungeon.room.ZMax - subDungeon.room.Z;
             if (subDungeon.room.position.x < beginPos.x && subDungeon.room.y < beginPos.z)
             {
                 beginPos.x = subDungeon.room.x + sizeX / 2;
