@@ -10,8 +10,9 @@ public class BoardManager : MonoBehaviour
     public GameObject wallTile;
     private bool[,] boardPositionsFloor;
 
+   
     public GameObject corridorTile;
-    private Vector3 beginPos = new Vector3(99, 1, 99);
+    private Vector3 beginPos = new Vector3(5, 10, 0.55f);
     private Vector3 endPos = new Vector3(1, 1, 1);
     public GameObject lastRoom;
     public GameObject player;
@@ -272,7 +273,8 @@ public class BoardManager : MonoBehaviour
                 {
                     if (boardPositionsFloor[i, j] == false)
                     {
-                        GameObject instance = Instantiate(corridorTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
+                        //moving the corridors and rotating
+                        GameObject instance = Instantiate(corridorTile, new Vector3(i, j, 0.6f), new Quaternion(0, -1, 1, 0)) as GameObject;
                         instance.transform.SetParent(transform);
                         boardPositionsFloor[i, j] = true;
                     }
@@ -315,7 +317,7 @@ public class BoardManager : MonoBehaviour
         {
             float sizeX = subDungeon.room.xMax - subDungeon.room.x;
             float sizeY = subDungeon.room.yMax - subDungeon.room.y;
-           // float sizeZ = subDungeon.room.ZMax - subDungeon.room.Z;
+            //float sizeZ = subDungeon.room.ZMax - subDungeon.room.Z;
             if (subDungeon.room.position.x < beginPos.x && subDungeon.room.y < beginPos.z)
             {
                 beginPos.x = subDungeon.room.x + sizeX / 2;
@@ -330,7 +332,7 @@ public class BoardManager : MonoBehaviour
                     boardPositionsFloor[i, j] = true;
                 }
             }
-            GameObject instance = Instantiate(room, new Vector3(subDungeon.room.x + sizeX / 2 - 0.5f, 0, subDungeon.room.y + sizeY / 2 - 0.5f), Quaternion.identity, transform) as GameObject;
+            GameObject instance = Instantiate(room, new Vector3(subDungeon.room.x + sizeX / 2 - 0.5f, subDungeon.room.y + sizeY / 2 - 0.5f, 0.6f),new Quaternion(0,-1,1,0), transform) as GameObject;
             instance.transform.localScale = new Vector3(sizeX * 0.1f, 1, sizeY * 0.1f);
 
             if (subDungeon.room.position.x > endPos.x && subDungeon.room.y > endPos.z)
