@@ -43,6 +43,9 @@ public class player : MonoBehaviour
     [SerializeField]
     private Collider2D attackTrigger;
 
+    [SerializeField]
+    private Collider2D attackTriggerSlide;
+
     public float max_health = 100;
     public float cur_health = 0f;
     public GameObject healthBar;
@@ -149,8 +152,16 @@ public class player : MonoBehaviour
             //{
             // rigi.gravityScale = 1.3f;
             //}
+            attackTrigger.enabled = true;
 
         }
+        if(isGrounded && !jump && this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") &&
+            this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("idle_animation") || isGrounded && !jump && this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("Run_animation")
+             && this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu"))
+        {
+            attackTrigger.enabled = false;
+        }
+
         if (this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu"))
         {
             rigi.gravityScale = 2f;
@@ -165,11 +176,18 @@ public class player : MonoBehaviour
         if(slide && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide"))
         {
             MyAnimu.SetBool("slide", true);
+            attackTriggerSlide.enabled = true;
         }
         else if (!this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide"))
         {
             MyAnimu.SetBool("slide", false);
+            //attackTriggerSlide.enabled = false;
         }
+
+        if (!slide && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide") && 
+            this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("idle_animation") || this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("Run_animation") 
+            && !slide && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide"))
+        { attackTriggerSlide.enabled = false; }
 
     }
 
@@ -179,14 +197,14 @@ public class player : MonoBehaviour
         {
             MyAnimu.SetTrigger("attack");
             rigi.velocity = Vector2.zero;
-            attackTrigger.enabled = true;
+            //attackTrigger.enabled = true;
 
 
         }
         if (!attack && isGrounded && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsTag("attack") ||
         !jumpAttack && !isGrounded && !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsName("jumpAttack"))
         {
-            attackTrigger.enabled = false;
+            //attackTrigger.enabled = false;
         }
 
 
@@ -282,15 +300,15 @@ public class player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Coins"))
-        {
-            other.gameObject.SetActive(false);
-            count = count + 1;
-            SetCountText();
-            //Destroy(other.gameObject);
-        }
+        //if (other.CompareTag("Coins"))
+        //{
+        //    other.gameObject.SetActive(false);
+        //    count = count + 1;
+        //    SetCountText();
+        //    //Destroy(other.gameObject);
+        //}
 
-        if (other.CompareTag("Enemy1"))
+        if (other.CompareTag("Enemy"))
         {
             if (attackTrigger.enabled == false)
             {
@@ -305,46 +323,46 @@ public class player : MonoBehaviour
 
         }
 
-        if (other.CompareTag("dead"))
-        {
-            rigi.transform.position = new Vector2(3.2f, -0.36f);
+        //if (other.CompareTag("dead"))
+        //{
+        //    rigi.transform.position = new Vector2(3.2f, -0.36f);
             
-                decreasehealth();
-                immortal = true;
+        //        decreasehealth();
+        //        immortal = true;
             
-        }
+        //}
 
-        if (other.CompareTag("dead2"))
-        {
-            rigi.transform.position = new Vector2(76.84f, -0.36f);
+        //if (other.CompareTag("dead2"))
+        //{
+        //    rigi.transform.position = new Vector2(76.84f, -0.36f);
            
-                decreasehealth();
-                immortal = true;
+        //        decreasehealth();
+        //        immortal = true;
             
-        }
+        //}
 
-        if (other.CompareTag("dead3"))
-        {
-            rigi.transform.position = new Vector2(0f, -0.96f);
+        //if (other.CompareTag("dead3"))
+        //{
+        //    rigi.transform.position = new Vector2(0f, -0.96f);
 
-            decreasehealth();
-            immortal = true;
+        //    decreasehealth();
+        //    immortal = true;
 
-        }
+        //}
 
-        if (other.CompareTag("dead4"))
-        {
-            rigi.transform.position = new Vector2(105.54f, -0.96f);
+        //if (other.CompareTag("dead4"))
+        //{
+        //    rigi.transform.position = new Vector2(105.54f, -0.96f);
 
-            decreasehealth();
-            immortal = true;
+        //    decreasehealth();
+        //    immortal = true;
 
-        }
+        //}
 
-        if (other.CompareTag("fly"))
-        {
-            rigi.AddForce(new Vector2(0, jumpForce * 2.5f));
-        }
+        //if (other.CompareTag("fly"))
+        //{
+        //    rigi.AddForce(new Vector2(0, jumpForce * 2.5f));
+        //}
 
 
     }
