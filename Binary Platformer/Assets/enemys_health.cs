@@ -27,14 +27,23 @@ public class enemys_health : MonoBehaviour {
         cur_health = max_health;
         rigid2D = GetComponent<Rigidbody2D>();
         position = transform.position;
-        player = GameObject.Find("Player");
-        target = player.transform;
+        //player = GameObject.Find("Player");
+        
+        player = GameObject.FindGameObjectWithTag("Player");
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+        //target = player.transform;
         points.GetComponent<player>();
+        points = player.GetComponent<player>();
+        
+        
     }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
+        target = GameObject.FindGameObjectWithTag("Player").transform;
+        points = player.GetComponent<player>();
+
         target = player.transform;
 
         if (player.transform.position.x <= position.x)
