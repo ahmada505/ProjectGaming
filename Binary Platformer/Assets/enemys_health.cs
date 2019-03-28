@@ -32,7 +32,7 @@ public class enemys_health : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player");
         target = GameObject.FindGameObjectWithTag("Player").transform;
         //target = player.transform;
-        points.GetComponent<player>();
+        //points.GetComponent<player>();
         points = player.GetComponent<player>();
         
         
@@ -70,7 +70,7 @@ public class enemys_health : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Sword")
+        if (other.gameObject.tag == "ATK")
         {
             if (textPos == "left")
             {
@@ -98,8 +98,8 @@ public class enemys_health : MonoBehaviour {
         }
 
         cur_health -= 10f;
-        float calc_health = cur_health / max_health;
-        SetHealthBar(calc_health);
+        //float calc_health = cur_health / max_health;
+       // SetHealthBar(calc_health);
 
         if (cur_health <= 0)
         {
@@ -110,8 +110,8 @@ public class enemys_health : MonoBehaviour {
         }
     }
 
-    public void SetHealthBar(float myHealth)
-    {
-        healthBar.transform.localScale = new Vector2(myHealth, healthBar.transform.localScale.y);
-    }
+    //public void SetHealthBar(float myHealth)
+    //{
+    //    healthBar.transform.localScale = new Vector2(myHealth, healthBar.transform.localScale.y);
+    //}
 }
