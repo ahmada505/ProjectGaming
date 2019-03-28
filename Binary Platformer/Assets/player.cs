@@ -118,10 +118,10 @@ public class player : MonoBehaviour
         float calc_health = cur_health / max_health;
         SetHealthBar(calc_health);
 
-        if (cur_health <= 0)
-        {
-            Application.LoadLevel("gameOver");
-        }
+        //if (cur_health <= 0)
+        //{
+        //    Application.LoadLevel("gameOver");
+        //}
     }
 
     public void SetHealthBar(float myHealth)
@@ -212,7 +212,7 @@ public class player : MonoBehaviour
         if (jumpAttack && !isGrounded && !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsName("jumpAttack"))
         {
             MyAnimu.SetBool("jumpAttack", true);
-            attackTrigger.enabled = true;
+            attackTrigger.enabled = false;
         }
 
         if (!jumpAttack && !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsName("jumpAttack"))
@@ -308,7 +308,7 @@ public class player : MonoBehaviour
         //    //Destroy(other.gameObject);
         //}
 
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("enemy"))
         {
             if (attackTrigger.enabled == false)
             {

@@ -44,8 +44,8 @@ public class EnterRoomBehaviour : MonoBehaviour {
                 }
                 StartCoroutine(CheckEnemies());
 
-                other.GetComponent<Shoot>().infinteAmmo = false;
-                other.GetComponent<Shoot>().ammo += 15;
+               // other.GetComponent<Shoot>().infinteAmmo = false;
+              //  other.GetComponent<Shoot>().ammo += 15;
                 if (activateBoss)
                 {
                     Boss.GetComponent<Boss>().enabled = true;
