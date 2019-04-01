@@ -7,6 +7,10 @@ TagManager:
   - ground
   - enemy
   - ATK
+  - PlayerCanvas
+  - Healthbar
+  - PlayerPoints
+  - HpDown
   layers:
   - Default
   - TransparentFX

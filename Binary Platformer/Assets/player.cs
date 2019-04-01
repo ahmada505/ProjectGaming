@@ -84,7 +84,11 @@ public class player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        float horizontal = Input.GetAxis("Horizontal");
+       // healthBar = GameObject.FindGameObjectWithTag("Healthbar");
+       // HpDown = GameObject.FindGameObjectWithTag("HpDown");
+
+
+    float horizontal = Input.GetAxis("Horizontal");
 
         isGrounded = IsGrounded();
 
@@ -98,30 +102,38 @@ public class player : MonoBehaviour
         AfterAttack();
 
         hpStore();
+        Winscreen();
 
-       
+
     }
 
+    public void Winscreen()
+    {
+        if (count > 200)
+        {
+            Application.LoadLevel("Endgame");
+        }
+    }
 
     public void decreasehealth()
     {
-        if (count >= 15)
-        {
-            cur_health -= 1.5f;
-        }
+        //if (count >= 15)
+        //{
+        //    cur_health -= 2f;
+        //}
 
-        if (count >= 25)
-        {
-            cur_health -= 1.5f;
-        }
+        //if (count >= 25)
+        //{
+        //    cur_health -= 2f;
+        //}
         cur_health -= 10f;
         float calc_health = cur_health / max_health;
         SetHealthBar(calc_health);
 
-        //if (cur_health <= 0)
-        //{
-        //    Application.LoadLevel("gameOver");
-        //}
+        if (cur_health <= 0)
+        {
+            Application.LoadLevel("GameOverScreen");
+        }
     }
 
     public void SetHealthBar(float myHealth)
@@ -155,7 +167,8 @@ public class player : MonoBehaviour
             attackTrigger.enabled = true;
 
         }
-        if(isGrounded && !jump && this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") &&
+
+        if (!isGrounded && !jump && this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") &&
             this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("idle_animation") || isGrounded && !jump && this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("Run_animation")
              && this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu"))
         {
@@ -310,7 +323,7 @@ public class player : MonoBehaviour
 
         if (other.CompareTag("enemy"))
         {
-            if (attackTrigger.enabled == false)
+            if (attackTrigger.enabled == false || attackTriggerSlide.enabled == false)
             {
 
                 if (!immortal)

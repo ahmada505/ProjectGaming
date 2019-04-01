@@ -4,4 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/BSP dungeon.unity
+    guid: 91ba0069b7e0a9f4ebe31c1c0d5e14fa
+  - enabled: 1
+    path: Assets/Endgame.unity
+    guid: a1a41e01d4cce814780d1dbc6fefab95
+  - enabled: 1
+    path: Assets/GameOverScreen.unity
+    guid: b17b91938d8a3174380224c69d7afc52

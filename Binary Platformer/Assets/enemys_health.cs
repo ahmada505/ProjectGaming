@@ -89,15 +89,15 @@ public class enemys_health : MonoBehaviour {
     {
         if(points.count >= 15)
         {
-            cur_health -= 2.5f;
+            cur_health -= 5f;
         }
 
         if (points.count >= 25)
         {
-            cur_health -= 2.5f;
+            cur_health -= 5f;
         }
 
-        cur_health -= 10f;
+        cur_health -= 15f;
         //float calc_health = cur_health / max_health;
        // SetHealthBar(calc_health);
 
