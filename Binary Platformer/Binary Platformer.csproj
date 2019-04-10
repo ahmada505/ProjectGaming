@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\BeginScreen.cs" />
+    <Compile Include="Assets\CollisionTrigger.cs" />
     <Compile Include="Assets\enemys_health.cs" />
     <Compile Include="Assets\GameOverScreen.cs" />
     <Compile Include="Assets\player.cs" />

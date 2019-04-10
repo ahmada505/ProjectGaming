@@ -84,11 +84,11 @@ public class player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-       // healthBar = GameObject.FindGameObjectWithTag("Healthbar");
-       // HpDown = GameObject.FindGameObjectWithTag("HpDown");
+        //healthBar = GameObject.FindGameObjectWithTag("Healthbar");
+        //HpDown = GameObject.FindGameObjectWithTag("HpDown");
+        //countText = GUI.;
 
-
-    float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxis("Horizontal");
 
         isGrounded = IsGrounded();
 
