@@ -109,7 +109,7 @@ public class player : MonoBehaviour
 
     public void Winscreen()
     {
-        if (count > 200)
+        if (count > 180)
         {
             Application.LoadLevel("Endgame");
         }
