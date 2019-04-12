@@ -1,132 +1,401 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour {
-    
-    public Vector3 playerToMouse;
-    private Vector3 movement;
-    private Vector3 velocity;
-    private float speed = 10;
-    private bool isGrounded = true;
+public class player : MonoBehaviour
+{
 
-    private int maxHealth = 3;
-    public int health;
-    public RawImage[] hearths = new RawImage[3];
+    private Rigidbody2D rigi;
 
-    private Rigidbody rigidbody;
-    private LineRenderer laserLine;
+    private Animator MyAnimu;
 
-	void Start ()
+    [SerializeField]
+    private float movementSpeed;
+
+    private bool facingRight;
+
+    private bool attack;
+
+    [SerializeField]
+    private Transform[] groundPoints;
+
+    [SerializeField]
+    private float groundRadius;
+
+    [SerializeField]
+    private LayerMask whatIsGround;
+
+    private bool isGrounded;
+
+    private bool jump;
+
+    private bool jumpAttack;
+
+    [SerializeField]
+    private bool aircontrol;
+
+    [SerializeField]
+    private float jumpForce;
+
+    public int count;
+    public Text countText;
+
+    [SerializeField]
+    private Collider2D attackTrigger;
+
+    [SerializeField]
+    private Collider2D attackTriggerSlide;
+
+    public float max_health = 100;
+    public float cur_health = 0f;
+    public GameObject healthBar;
+
+    private SpriteRenderer sprite;
+
+    [SerializeField]
+    private GameObject HpDown;
+
+    private bool slide;
+
+    public bool immortal;
+
+    // [SerializeField]
+    private float immortalTime = 300f;
+
+    // Use this for initialization
+    void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
-        laserLine = GetComponent<LineRenderer>();
-        health = maxHealth;
-	}
-	
+
+        facingRight = true;
+        rigi = GetComponent<Rigidbody2D>();
+        MyAnimu = GetComponent<Animator>();
+
+        sprite = GetComponent<SpriteRenderer>();
+        cur_health = max_health;
+
+        //InvokeRepeating("decreasehealth", 1f, 1f);
+    }
+
     void Update()
     {
-        Turning();
+        handleInput();
     }
 
-	void FixedUpdate ()
+    // Update is called once per frame
+    void FixedUpdate()
     {
-        laserLine.SetPosition(0, transform.position);
-        movement = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
-        velocity = movement.normalized * speed;
-        rigidbody.velocity = velocity;
+        //healthBar = GameObject.FindGameObjectWithTag("Healthbar");
+        //HpDown = GameObject.FindGameObjectWithTag("HpDown");
+        //countText = GUI.;
 
-        /*if (Input.GetKeyUp(KeyCode.Space) && isGrounded)
+        float horizontal = Input.GetAxis("Horizontal");
+
+        isGrounded = IsGrounded();
+
+        HandleMovement(horizontal);
+        Flip(horizontal);
+
+        handleAttacks();
+        Handlelayer();
+
+        resetvalues();
+        AfterAttack();
+
+        hpStore();
+        Winscreen();
+
+
+    }
+
+    public void Winscreen()
+    {
+        if (count > 200)
         {
-            transform.Translate(new Vector3(0, 1.2f, 0));
+            Application.LoadLevel("Endgame");
+        }
+    }
+
+    public void decreasehealth()
+    {
+        //if (count >= 15)
+        //{
+        //    cur_health -= 2f;
+        //}
+
+        //if (count >= 25)
+        //{
+        //    cur_health -= 2f;
+        //}
+        cur_health -= 10f;
+        float calc_health = cur_health / max_health;
+        SetHealthBar(calc_health);
+
+        if (cur_health <= 0)
+        {
+            Application.LoadLevel("GameOverScreen");
+        }
+    }
+
+    public void SetHealthBar(float myHealth)
+    {
+        healthBar.transform.localScale = new Vector2(myHealth, healthBar.transform.localScale.y);
+    }
+
+    private void HandleMovement(float horizontal)
+    {
+        if (rigi.velocity.y < 0)
+        {
+            MyAnimu.SetBool("land", true);
+        }
+
+        if (!this.MyAnimu.GetBool("slide") && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsTag("attack") && (isGrounded || aircontrol))
+        {
+            rigi.velocity = new Vector2(horizontal * movementSpeed, rigi.velocity.y);
+        }
+
+        MyAnimu.SetFloat("speed", Mathf.Abs(horizontal));
+
+        if (isGrounded && jump)
+        {
             isGrounded = false;
+            rigi.AddForce(new Vector2(0, jumpForce));
+            MyAnimu.SetTrigger("jump");
+            //if (rigi.position.y > 3)
+            //{
+            // rigi.gravityScale = 1.3f;
+            //}
         }
-        else if (!isGrounded)
+
+        if (jump || this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu")) { attackTrigger.enabled = true; }
+
+        if (!this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") && this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("idle_animation") ||
+            !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") && this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("Run_animation"))
         {
-            GetComponent<Rigidbody>().AddForce(0, -1000f, 0);
-        }*/
+            attackTrigger.enabled = false;
+
+        }
+
+        if (this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu"))
+        {
+            rigi.gravityScale = 2f;
+            // rigi.mass = 1.5f;
+        }
+        else
+        {
+           // rigi.gravityScale = 1.3f;
+            //rigi.mass = 1;
+        }
+
+        if(slide && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide"))
+        {
+            MyAnimu.SetBool("slide", true);
+            attackTriggerSlide.enabled = true;
+        }
+        else if (!this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide"))
+        {
+            MyAnimu.SetBool("slide", false);
+            //attackTriggerSlide.enabled = false;
+        }
+
+        if (!slide && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide") && 
+            this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("idle_animation") || this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("Run_animation") 
+            && !slide && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("slide"))
+        { attackTriggerSlide.enabled = false; }
+
     }
 
-    void Turning()
+    private void handleAttacks()
     {
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition); // cast the ray from MainCamera to mouseposition
-
-        RaycastHit floorHit;
-
-        if (Physics.Raycast(camRay, out floorHit, 100f))
+        if (attack && isGrounded && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsTag("attack"))
         {
-            playerToMouse = floorHit.point; // store the Vector3 from hitpoint to player transform
-            playerToMouse.y = transform.position.y;
+            MyAnimu.SetTrigger("attack");
+            rigi.velocity = Vector2.zero;
+            //attackTrigger.enabled = true;
 
-            Quaternion newRotation = Quaternion.LookRotation(playerToMouse - transform.position); // store the playerToMouse as a quaternion newRotation
-            rigidbody.MoveRotation(newRotation); // rotate the rigidbody to look at newRotation
 
-            laserLine.SetPosition(1, playerToMouse);
-            laserLine.SetPosition(1, new Vector3(laserLine.GetPosition(1).x, transform.position.y + 0.5f, laserLine.GetPosition(1).z));
         }
+        if (!attack && isGrounded && !this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsTag("attack") ||
+        !jumpAttack && !isGrounded && !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsName("jumpAttack"))
+        {
+            //attackTrigger.enabled = false;
+        }
+
+
+
+        if (jumpAttack && !isGrounded && !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsName("jumpAttack"))
+        {
+            MyAnimu.SetBool("jumpAttack", true);
+            attackTrigger.enabled = false;
+        }
+
+        if (!jumpAttack && !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsName("jumpAttack"))
+        {
+            MyAnimu.SetBool("jumpAttack", false);
+        }
+
     }
 
-    public void Hit()
+    private void handleInput()
     {
-        health--;
-        for (int i = 0; i < hearths.Length; i++)
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (i < health) { hearths[i].enabled = true; }
-            else { hearths[i].enabled = false; }
+            jump = true;
         }
-        if (health <= 0) { Application.LoadLevel(0); }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            attack = true;
+            //jumpAttack = true;
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            slide = true;
+        }
+
     }
 
-    void OnCollisionEnter(Collision other)
+    private void Flip(float horizontal)
     {
-        if(other.gameObject.tag == "ground")
+        if (horizontal > 0 && !facingRight || horizontal < 0 && facingRight)
         {
-            isGrounded = true;
-        }
+            facingRight = !facingRight;
 
-        else if(other.gameObject.tag == "enemy")
-        {
-            Hit();
-        }
+            Vector3 TheScale = transform.localScale;
 
-        else if(other.gameObject.name == "Ice")
-        {
-            speed = 9;
+            TheScale.x *= -1;
+
+            transform.localScale = TheScale;
         }
     }
 
-    void OnCollisionExit(Collision other)
+    private void resetvalues()
     {
-        if (other.gameObject.name == "Ice")
-        {
-            speed = 7;
-        }
+        attack = false;
+        jump = false;
+        jumpAttack = false;
+        slide = false;
     }
 
-    void OnTriggerStay(Collider other)
+    private bool IsGrounded()
     {
-        if(other.name == "Pull")
+        if (rigi.velocity.y <= 0)
         {
-            rigidbody.useGravity = false;
-            Vector3 direction = (other.gameObject.transform.position - transform.position);
-            GetComponent<ConstantForce>().force = Vector3.Normalize(direction) * 500;
-        }
+            foreach (Transform point in groundPoints)
+            {
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(point.position, groundRadius, whatIsGround);
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i].gameObject != gameObject)
+                    {
+                        MyAnimu.ResetTrigger("jump");
+                        MyAnimu.SetBool("land", false);
+                        return true;
+                    }
+                }
 
-        else if (other.name == "Push")
-        {
-            rigidbody.useGravity = false;
-            Vector3 direction = (other.gameObject.transform.position - transform.position);
-            GetComponent<ConstantForce>().force = -(Vector3.Normalize(direction) * 500);
+            }
         }
+        return false;
     }
 
-    void OnTriggerExit(Collider other)
+    private void Handlelayer()
     {
-        if (other.name == "Pull" || other.name == "Push")
+        if (!isGrounded)
         {
-            rigidbody.useGravity = true;
-            GetComponent<ConstantForce>().force = Vector3.zero;
+            MyAnimu.SetLayerWeight(1, 1);
+        }
+        else
+        {
+            MyAnimu.SetLayerWeight(1, 0);
         }
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.CompareTag("enemy"))
+        {
+            if (attackTrigger.enabled == false || attackTriggerSlide.enabled == false)
+            {
+
+                if (!immortal && attackTrigger.enabled == false)
+                {
+                    decreasehealth();
+                    immortal = true;
+
+                }
+
+                if (attackTrigger.enabled == true && other.CompareTag("enemy"))
+                {
+                    isGrounded = false;
+                    rigi.AddForce(new Vector2(0, jumpForce));
+                    MyAnimu.SetTrigger("jump");
+                }
+            } 
+        }
+
+
+    }
+
+    public void AfterAttack()
+    {
+        if (immortal == true)
+        {
+            immortalTime--;
+            StartCoroutine(takedamage());
+        }
+
+        if (immortalTime == 0)
+        {
+            immortal = false;
+            immortalTime = 200f;
+        }
+    }
+
+    IEnumerator takedamage()
+    {
+        if (immortal == true)
+        {
+            sprite.enabled = false;
+            yield return new WaitForSeconds(.1f);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(.1f);
+        }
+
+    }
+
+    public void SetCountText()
+    {
+        countText.text = "Points: " + count.ToString();
+    }
+
+    public void hpStore()
+    {
+        if (cur_health < 100 && count >= 5)
+        {
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                cur_health += 10;
+                float calc_health = cur_health / max_health;
+                SetHealthBar(calc_health);
+                count -= 3;
+            }
+        }
+
+        if (cur_health > 100)
+        {
+            cur_health = 100;
+        }
+
+        if (cur_health < 100 && count >= 5)
+        {
+            HpDown.SetActive(true);
+        }
+        else
+        {
+            HpDown.SetActive(false);
+        }
+    }
+
 }

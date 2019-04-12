@@ -220,19 +220,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BeginScreen.cs" />
-    <Compile Include="Assets\CollisionTrigger.cs" />
-    <Compile Include="Assets\enemys_health.cs" />
-    <Compile Include="Assets\GameOverScreen.cs" />
-    <Compile Include="Assets\player.cs" />
-    <Compile Include="Assets\Scripts\AIController.cs" />
+    <Compile Include="Assets\Scripts\BeginScreen.cs" />
     <Compile Include="Assets\Scripts\BoardManager.cs" />
-    <Compile Include="Assets\Scripts\Boss.cs" />
-    <Compile Include="Assets\Scripts\Bullit.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\CollisionTrigger.cs" />
+    <Compile Include="Assets\Scripts\enemys_health.cs" />
     <Compile Include="Assets\Scripts\EnterRoomBehaviour.cs" />
+    <Compile Include="Assets\Scripts\GameOverScreen.cs" />
     <Compile Include="Assets\Scripts\Lever.cs" />
-    <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\player.cs" />
     <Compile Include="Assets\Scripts\Shoot.cs" />
     <Compile Include="Assets\Scripts\Shootable.cs" />
   </ItemGroup>

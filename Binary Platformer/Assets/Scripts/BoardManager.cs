@@ -12,7 +12,7 @@ public class BoardManager : MonoBehaviour
 
    
     public GameObject corridorTile;
-    private Vector3 beginPos = new Vector3(5, 10, 0.55f);
+    private Vector3 beginPos = new Vector3(15, 10, 0.55f);
     private Vector3 endPos = new Vector3(1, 1, 1);
     public GameObject lastRoom;
     public GameObject player;
@@ -26,8 +26,8 @@ public class BoardManager : MonoBehaviour
         DrawRooms(rootSubDungeon);
         DrawCorridors(rootSubDungeon);
         DrawWalls(rootSubDungeon);
-        Instantiate(player, beginPos, Quaternion.identity);
         lastRoom.name = "Last Room";
+        Instantiate(player, beginPos, Quaternion.identity);
 
     }
 

@@ -14,7 +14,7 @@ public class EnterRoomBehaviour : MonoBehaviour {
 	void Start () {
         gameObject.SetActive(false);
         Boss = GameObject.Find("Boss");
-        int random = (int)Random.Range(0f, 6f);
+        int random = (int)Random.Range(0f, 1f);
         if (random >= 4) gameObject.SetActive(true);
         if (gameObject.transform.parent.gameObject.name == "Last Room")
         {
@@ -46,10 +46,10 @@ public class EnterRoomBehaviour : MonoBehaviour {
 
                // other.GetComponent<Shoot>().infinteAmmo = false;
               //  other.GetComponent<Shoot>().ammo += 15;
-                if (activateBoss)
-                {
-                    Boss.GetComponent<Boss>().enabled = true;
-                }
+                //if (activateBoss)
+                //{
+                //    Boss.GetComponent<Boss>().enabled = true;
+                //}
             }
         }
     }
