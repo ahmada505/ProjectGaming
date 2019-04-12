@@ -331,6 +331,7 @@ public class player : MonoBehaviour
                     isGrounded = false;
                     rigi.AddForce(new Vector2(0, jumpForce));
                     MyAnimu.SetTrigger("jump");
+
                 }
             } 
         }

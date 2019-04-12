@@ -21,7 +21,7 @@ public class CameraFollow : MonoBehaviour {
         if (target != null)
         {
             Vector3 targetCamPos = target.position + offset;
-            transform.position = Vector3.Lerp(new Vector3(transform.position.x, transform.position.y + 1f, -15f), targetCamPos, smoothing * Time.deltaTime);
+            transform.position = Vector3.Lerp(new Vector3(transform.position.x + 2, transform.position.y + 1f, -15f), targetCamPos, smoothing * Time.deltaTime);
         }
         else
         {
