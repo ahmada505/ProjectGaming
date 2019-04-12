@@ -103,15 +103,9 @@ public class enemys_health : MonoBehaviour {
 
         if (cur_health <= 0)
         {
-            //gameObject.SetActive(false);
-            points.count += 25;
+            points.count += 30;
             Destroy(this.gameObject);
             
         }
     }
-
-    //public void SetHealthBar(float myHealth)
-    //{
-    //    healthBar.transform.localScale = new Vector2(myHealth, healthBar.transform.localScale.y);
-    //}
 }

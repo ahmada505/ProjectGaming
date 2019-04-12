@@ -60,7 +60,7 @@ public class player : MonoBehaviour
     public bool immortal;
 
     // [SerializeField]
-    private float immortalTime = 200f;
+    private float immortalTime = 300f;
 
     // Use this for initialization
     void Start()
@@ -164,15 +164,15 @@ public class player : MonoBehaviour
             //{
             // rigi.gravityScale = 1.3f;
             //}
-            attackTrigger.enabled = true;
-
         }
 
-        if (!isGrounded && !jump && this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") &&
-            this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("idle_animation") || isGrounded && !jump && this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("Run_animation")
-             && this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu"))
+        if (jump || this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu")) { attackTrigger.enabled = true; }
+
+        if (!this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") && this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("idle_animation") ||
+            !this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu") && this.MyAnimu.GetCurrentAnimatorStateInfo(0).IsName("Run_animation"))
         {
             attackTrigger.enabled = false;
+
         }
 
         if (this.MyAnimu.GetCurrentAnimatorStateInfo(1).IsTag("landsu"))
@@ -244,7 +244,7 @@ public class player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             attack = true;
-            jumpAttack = true;
+            //jumpAttack = true;
 
         }
 
@@ -313,83 +313,30 @@ public class player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //if (other.CompareTag("Coins"))
-        //{
-        //    other.gameObject.SetActive(false);
-        //    count = count + 1;
-        //    SetCountText();
-        //    //Destroy(other.gameObject);
-        //}
 
         if (other.CompareTag("enemy"))
         {
             if (attackTrigger.enabled == false || attackTriggerSlide.enabled == false)
             {
 
-                if (!immortal)
+                if (!immortal || attackTrigger.enabled == false)
                 {
                     decreasehealth();
                     immortal = true;
 
                 }
-            }
 
+                if (attackTrigger.enabled == true && other.CompareTag("enemy"))
+                {
+                    isGrounded = false;
+                    rigi.AddForce(new Vector2(0, jumpForce));
+                    MyAnimu.SetTrigger("jump");
+                }
+            } 
         }
-
-        //if (other.CompareTag("dead"))
-        //{
-        //    rigi.transform.position = new Vector2(3.2f, -0.36f);
-            
-        //        decreasehealth();
-        //        immortal = true;
-            
-        //}
-
-        //if (other.CompareTag("dead2"))
-        //{
-        //    rigi.transform.position = new Vector2(76.84f, -0.36f);
-           
-        //        decreasehealth();
-        //        immortal = true;
-            
-        //}
-
-        //if (other.CompareTag("dead3"))
-        //{
-        //    rigi.transform.position = new Vector2(0f, -0.96f);
-
-        //    decreasehealth();
-        //    immortal = true;
-
-        //}
-
-        //if (other.CompareTag("dead4"))
-        //{
-        //    rigi.transform.position = new Vector2(105.54f, -0.96f);
-
-        //    decreasehealth();
-        //    immortal = true;
-
-        //}
-
-        //if (other.CompareTag("fly"))
-        //{
-        //    rigi.AddForce(new Vector2(0, jumpForce * 2.5f));
-        //}
 
 
     }
-    //void OnCollisionEnter2D(Collision2D other)
-    //{
-    //    if (other.transform.tag == "MovingPlatform")
-    //    { transform.parent = other.transform; }
-    //}
-
-    //void OnCollisionExit2D(Collision2D other)
-    //{
-    //    if (other.transform.tag == "MovingPlatform")
-    //    { transform.parent = null; }
-    //}
 
     public void AfterAttack()
     {
@@ -432,7 +379,7 @@ public class player : MonoBehaviour
                 cur_health += 10;
                 float calc_health = cur_health / max_health;
                 SetHealthBar(calc_health);
-                count -= 5;
+                count -= 3;
             }
         }
 

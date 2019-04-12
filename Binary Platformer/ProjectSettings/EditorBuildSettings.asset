@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/MainScreen.unity
+    guid: bf5a8444a809da245ae25a181180a44c
+  - enabled: 1
     path: Assets/BSP dungeon.unity
     guid: 91ba0069b7e0a9f4ebe31c1c0d5e14fa
   - enabled: 1
